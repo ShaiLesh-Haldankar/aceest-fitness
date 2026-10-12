@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ACEest Fitness &amp; Gym</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#1a1a1a; color:#eee; margin:0; }
+    header { background:#d4af37; color:#000; padding:20px; text-align:center; }
+    main { max-width:960px; margin:auto; padding:20px; }
+    .card { background:#262626; border-radius:8px; padding:16px; margin-bottom:16px; }
+    h2 { color:#d4af37; }
+    code { color:#9cdcfe; }
+  </style>
+</head>
+<body>
+  <header><h1>ACEest Functional Fitness</h1></header>
+  <main>
+    <p>Capacity: {{ metrics.capacity_users }} users &middot; Area: {{ metrics.area_sq_ft }} sq ft &middot; Break-even: {{ metrics.break_even_members }} members</p>
+    {% for code, p in programs.items() %}
+    <div class="card">
+      <h2>{{ p.name }} ({{ code }})</h2>
+      <strong>Workout</strong>
+      <ul>{% for w in p.workout %}<li>{{ w }}</li>{% endfor %}</ul>
+      <strong>Diet</strong>
+      <ul>{% for d in p.diet %}<li>{{ d }}</li>{% endfor %}</ul>
+    </div>
+    {% endfor %}
+    <p>API: <code>/health</code>, <code>/api/programs</code>, <code>/api/clients</code>, <code>/api/bmi?weight=70&amp;height=175</code></p>
+  </main>
+</body>
+</html>
