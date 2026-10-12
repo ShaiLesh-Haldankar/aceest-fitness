@@ -8,7 +8,7 @@ from flask import Flask, jsonify, render_template, request
 import fitness
 from db import close_db, get_db, init_db
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 
 
 def create_app(config=None):
