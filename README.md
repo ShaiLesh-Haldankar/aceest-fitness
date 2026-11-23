@@ -133,3 +133,63 @@ A Pipeline job configured with *Pipeline script from SCM* pointing at this GitHu
 * `feature/*`, `infra/*`, `ci/*`, `docs/*` — short-lived branches merged with `--no-ff`.
 * Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `test:`, `ci:`, `build:`, `docs:`, `chore:`).
 * Legacy versions are tagged `legacy-v1.0` … `legacy-v3.2.4`; releases are tagged `v1.0.0`.
+
+---
+
+# Assignment 2 - Full CI/CD with Jenkins, SonarQube, Docker Hub and Kubernetes
+
+Assignment 2 extends the service with incremental versions and a complete delivery pipeline.
+
+## Application versions (git tags)
+
+| Tag | Image on Docker Hub | What changed |
+|---|---|---|
+| `v1.0.1` | `sh00010111/aceest-fitness:1.0.1` | Baseline from Assignment 1 |
+| `v1.1.0` | `sh00010111/aceest-fitness:1.1.0` | New `GET /api/clients/<name>/summary` (BMI, calories, adherence, workout totals) |
+| `v1.2.0` | `sh00010111/aceest-fitness:1.2.0` | New `GET /api/stats` (clients per program, average adherence, workouts) |
+
+Docker Hub repository: https://hub.docker.com/r/sh00010111/aceest-fitness
+
+## CI/CD architecture
+
+```
+ git push / tag --> GitHub --poll (2 min)--> Jenkins
+                                              | 1 Checkout (reads APP_VERSION)
+                                              | 2 venv + install   3 py_compile + flake8
+                                              | 4 Pytest (JUnit + coverage.xml)
+                                              | 5 SonarQube scan --> Quality Gate (fails build if not OK)
+                                              | 6 docker build (runtime + test targets)
+                                              | 7 Pytest inside the container
+                                              | 8 docker push  :<version> :build-<n> :latest  --> Docker Hub
+                                              + 9 archive artifacts (tar.gz per version, coverage, sonar report)
+ Docker Hub --pull--> Minikube (Kubernetes): rolling | blue-green | canary | shadow | A/B  (+ rollback)
+```
+
+GitHub Actions (`.github/workflows/main.yml`) still runs lint, Docker build and containerised tests on every push and pull request.
+
+## Jenkins setup
+
+* Pipeline job from SCM (`Jenkinsfile`), polling every 2 minutes (`pollSCM`).
+* Credentials: `dockerhub-creds` (Docker Hub username + access token) and `sonar-token` (SonarQube user token).
+* The Docker, SonarQube scanner (`sonarsource/sonar-scanner-cli`) and Pytest steps run through plain shell steps - no extra plugins required.
+* Build artifacts per version: `aceest-fitness-<version>.tar.gz`, `build-info.txt`, `test-results.xml`, `coverage.xml`, `sonar-report.txt`.
+
+## SonarQube
+
+`sonar-project.properties` defines the project (`aceest-fitness`), sources, tests and coverage report. `scripts/sonar_gate.sh` waits for the analysis, writes `sonar-report.txt` and fails the pipeline when the quality gate is not OK.
+
+## Kubernetes (Minikube) - deployment strategies
+
+Run `bash scripts/setup_minikube.sh` once, then `sh00010111=<user> bash scripts/k8s_demo.sh`.
+
+| Strategy | Manifest | NodePort | How it works | Rollback |
+|---|---|---|---|---|
+| Rolling update | `k8s/01-rolling-update.yaml` | 30081 | 3 replicas, `maxUnavailable: 0`, `maxSurge: 1`, readiness probes | `kubectl rollout undo` |
+| Blue-green | `k8s/02-blue-green.yaml` | 30082 | Two full environments; Service selector switches blue to green | Patch selector back to blue |
+| Canary | `k8s/03-canary.yaml` | 30083 | 3 stable pods + 1 canary pod behind one Service (~25% traffic) | Scale canary to 0 |
+| Shadow | `k8s/04-shadow.yaml` | 30084 | nginx `mirror` copies live traffic to v1.2.0; its replies are discarded | Delete the shadow deployment |
+| A/B testing | `k8s/05-ab-testing.yaml` | 30085 | nginx routes on header `X-Variant: B` to v1.2.0, all others to v1.0.1 | Remove the header rule |
+
+Automatic rollback: `scripts/deploy_with_rollback.sh <deployment> <image>` updates a deployment, waits for the rollout and runs `kubectl rollout undo` if it does not become healthy.
+
+Endpoints (Minikube IP from `minikube ip`): `http://<ip>:30081` ... `http://<ip>:30085`.
