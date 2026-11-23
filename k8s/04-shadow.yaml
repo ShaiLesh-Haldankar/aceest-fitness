@@ -1,0 +1,157 @@
+# Shadow: every request is answered by production (1.0.1) and silently mirrored to the new version (1.2.0); its response is discarded.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-shadow-prod
+  labels:
+    strategy: aceest-shadow-prod
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aceest-shadow-prod
+  template:
+    metadata:
+      labels:
+        app: aceest-shadow-prod
+    spec:
+      containers:
+        - name: app
+          image: docker.io/sh00010111/aceest-fitness:1.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {cpu: 200m, memory: 160Mi}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-shadow-new
+  labels:
+    strategy: aceest-shadow-new
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aceest-shadow-new
+  template:
+    metadata:
+      labels:
+        app: aceest-shadow-new
+    spec:
+      containers:
+        - name: app
+          image: docker.io/sh00010111/aceest-fitness:1.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {cpu: 200m, memory: 160Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-shadow-prod
+spec:
+  selector:
+    app: aceest-shadow-prod
+  ports:
+    - port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-shadow-new
+spec:
+  selector:
+    app: aceest-shadow-new
+  ports:
+    - port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aceest-shadow-gw-conf
+data:
+  default.conf: |
+      upstream prod   { server aceest-shadow-prod:5000; }
+      upstream shadow { server aceest-shadow-new:5000; }
+      server {
+        listen 80;
+        location / {
+          mirror /mirror;
+          mirror_request_body on;
+          proxy_pass http://prod;
+        }
+        location = /mirror {
+          internal;
+          proxy_pass http://shadow$request_uri;
+          proxy_set_header X-Shadow-Traffic "true";
+        }
+      }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-shadow-gw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest-shadow-gw
+  template:
+    metadata:
+      labels:
+        app: aceest-shadow-gw
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: conf
+              mountPath: /etc/nginx/conf.d
+          resources:
+            requests: {cpu: 10m, memory: 16Mi}
+            limits: {cpu: 100m, memory: 64Mi}
+      volumes:
+        - name: conf
+          configMap:
+            name: aceest-shadow-gw-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-shadow-gw
+spec:
+  type: NodePort
+  selector:
+    app: aceest-shadow-gw
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30084
