@@ -8,7 +8,7 @@ from flask import Flask, jsonify, render_template, request
 import fitness
 from db import close_db, get_db, init_db
 
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 
 
 def create_app(config=None):
@@ -206,6 +206,21 @@ def _register_routes(app):
             summary["bmi"] = bmi_value
             summary["bmi_category"] = fitness.bmi_category(bmi_value)
         return jsonify(summary)
+
+    @app.get("/api/stats")
+    def stats():
+        db = get_db()
+        total = db.execute("SELECT COUNT(*) AS n FROM clients").fetchone()["n"]
+        by_program = {r["program"]: r["n"] for r in db.execute(
+            "SELECT program, COUNT(*) AS n FROM clients GROUP BY program")}
+        avg = db.execute("SELECT AVG(adherence) AS a FROM progress").fetchone()["a"]
+        workouts = db.execute("SELECT COUNT(*) AS n FROM workouts").fetchone()["n"]
+        return jsonify(
+            total_clients=total,
+            clients_by_program=by_program,
+            average_adherence=round(avg, 1) if avg is not None else 0.0,
+            total_workouts=workouts,
+        )
 
 
 def _register_error_handlers(app):
