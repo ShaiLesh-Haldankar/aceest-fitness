@@ -1,0 +1,164 @@
+
+=================== Cluster ===================
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   19m   v1.37.0
+Endpoint base: http://192.168.49.2
+
+=================== Deploy all manifests ===================
+deployment.apps/aceest-rolling created
+service/aceest-rolling created
+deployment.apps/aceest-blue created
+deployment.apps/aceest-green created
+service/aceest-bg created
+deployment.apps/aceest-canary-stable created
+deployment.apps/aceest-canary-new created
+service/aceest-canary created
+deployment.apps/aceest-shadow-prod created
+deployment.apps/aceest-shadow-new created
+service/aceest-shadow-prod created
+service/aceest-shadow-new created
+configmap/aceest-shadow-gw-conf created
+deployment.apps/aceest-shadow-gw created
+service/aceest-shadow-gw created
+deployment.apps/aceest-ab-a created
+deployment.apps/aceest-ab-b created
+service/aceest-ab-a created
+service/aceest-ab-b created
+configmap/aceest-ab-gw-conf created
+deployment.apps/aceest-ab-gw created
+service/aceest-ab-gw created
+ready: aceest-rolling
+ready: aceest-blue
+ready: aceest-green
+ready: aceest-canary-stable
+ready: aceest-canary-new
+ready: aceest-shadow-prod
+ready: aceest-shadow-new
+ready: aceest-shadow-gw
+ready: aceest-ab-a
+ready: aceest-ab-b
+ready: aceest-ab-gw
+NAME                                        READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+pod/aceest-ab-a-57cb974cb4-6dz97            1/1     Running   0          38s   10.244.0.18   minikube   <none>           <none>
+pod/aceest-ab-b-85c4775548-2hbbc            1/1     Running   0          37s   10.244.0.17   minikube   <none>           <none>
+pod/aceest-ab-gw-994bcdf76-9mk5d            1/1     Running   0          37s   10.244.0.19   minikube   <none>           <none>
+pod/aceest-blue-775df6f994-pnwng            1/1     Running   0          39s   10.244.0.7    minikube   <none>           <none>
+pod/aceest-blue-775df6f994-pp27r            1/1     Running   0          39s   10.244.0.6    minikube   <none>           <none>
+pod/aceest-canary-new-569446d5bf-fbqpt      1/1     Running   0          39s   10.244.0.12   minikube   <none>           <none>
+pod/aceest-canary-stable-54fbb6bb6c-2hdn7   1/1     Running   0          39s   10.244.0.11   minikube   <none>           <none>
+pod/aceest-canary-stable-54fbb6bb6c-2q9cw   1/1     Running   0          39s   10.244.0.9    minikube   <none>           <none>
+pod/aceest-canary-stable-54fbb6bb6c-znq5q   1/1     Running   0          39s   10.244.0.13   minikube   <none>           <none>
+pod/aceest-green-bf4969fbb-6k4jk            1/1     Running   0          39s   10.244.0.10   minikube   <none>           <none>
+pod/aceest-green-bf4969fbb-xp5vc            1/1     Running   0          39s   10.244.0.8    minikube   <none>           <none>
+pod/aceest-rolling-675c7c47fb-b8gsc         1/1     Running   0          39s   10.244.0.4    minikube   <none>           <none>
+pod/aceest-rolling-675c7c47fb-ld64l         1/1     Running   0          39s   10.244.0.5    minikube   <none>           <none>
+pod/aceest-rolling-675c7c47fb-t8kjq         1/1     Running   0          39s   10.244.0.3    minikube   <none>           <none>
+pod/aceest-shadow-gw-7677d778bb-rnhs2       1/1     Running   0          38s   10.244.0.16   minikube   <none>           <none>
+pod/aceest-shadow-new-7949486fdf-trtqz      1/1     Running   0          38s   10.244.0.15   minikube   <none>           <none>
+pod/aceest-shadow-prod-746f59c85c-fdk2m     1/1     Running   0          38s   10.244.0.14   minikube   <none>           <none>
+
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+service/aceest-ab-a          ClusterIP   10.100.27.133    <none>        5000/TCP       37s   app=aceest-ab-a
+service/aceest-ab-b          ClusterIP   10.100.67.58     <none>        5000/TCP       37s   app=aceest-ab-b
+service/aceest-ab-gw         NodePort    10.104.152.169   <none>        80:30085/TCP   37s   app=aceest-ab-gw
+service/aceest-bg            NodePort    10.105.171.113   <none>        80:30082/TCP   39s   app=aceest-bg,version=blue
+service/aceest-canary        NodePort    10.106.70.247    <none>        80:30083/TCP   39s   app=aceest-canary
+service/aceest-rolling       NodePort    10.101.59.108    <none>        80:30081/TCP   39s   app=aceest-rolling
+service/aceest-shadow-gw     NodePort    10.101.32.51     <none>        80:30084/TCP   38s   app=aceest-shadow-gw
+service/aceest-shadow-new    ClusterIP   10.98.231.129    <none>        5000/TCP       38s   app=aceest-shadow-new
+service/aceest-shadow-prod   ClusterIP   10.108.6.1       <none>        5000/TCP       38s   app=aceest-shadow-prod
+
+=================== 1. ROLLING UPDATE (zero downtime) :30081 ===================
+before: "version":"1.0.1"
+deployment.apps/aceest-rolling image updated
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+deployment "aceest-rolling" successfully rolled out
+after update: "version":"1.2.0"
+deployment.apps/aceest-rolling 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+--- rollback (kubectl rollout undo)
+Warning: resource deployments/aceest-rolling was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/aceest-rolling rolled back
+Waiting for deployment "aceest-rolling" rollout to finish: 0 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+deployment "aceest-rolling" successfully rolled out
+after rollback: "version":"1.0.1"
+
+=================== 2. BLUE-GREEN :30082 ===================
+live = blue : "version":"1.0.1"
+--- switch traffic to green
+service/aceest-bg patched
+live = green: "version":"1.0.1"
+new endpoint /api/stats on green -> HTTP 404
+--- instant rollback to blue
+service/aceest-bg patched
+live = blue : "version":"1.0.1"
+
+=================== 3. CANARY (3 stable : 1 canary) :30083 ===================
+20 requests -> version distribution:
+     17 "version":"1.0.1"
+      3 "version":"1.2.0"
+--- rollback canary: scale canary to 0
+deployment.apps/aceest-canary-new scaled
+20 requests after rollback:
+     20 "version":"1.0.1"
+
+=================== 4. SHADOW (mirror to 1.2.0, responses discarded) :30084 ===================
+client sees: "version":"1.0.1"
+{"age":null,"calories":1690,"height":170.0,"id":1,"membership_status":"Active","name":"ShadowTest","program":"BG","weight":65.0}
+
+{"error":"Not found"}
+(404 from prod 1.0.1: stats exists only in 1.2.0)
+--- shadow pod (1.2.0) logs show the mirrored requests:
+10.244.0.1 - - [23/Nov/2026:19:39:16 +0000] "GET /health HTTP/1.1" 200 34 "-" "kube-probe/1.37"
+10.244.0.1 - - [23/Nov/2026:19:39:17 +0000] "GET /health HTTP/1.1" 200 34 "-" "kube-probe/1.37"
+10.244.0.16 - - [23/Nov/2026:19:39:17 +0000] "GET /health HTTP/1.0" 200 34 "-" "curl/7.76.1"
+10.244.0.16 - - [23/Nov/2026:19:39:17 +0000] "POST /api/clients HTTP/1.0" 201 129 "-" "curl/7.76.1"
+10.244.0.16 - - [23/Nov/2026:19:39:17 +0000] "GET /api/stats HTTP/1.0" 200 93 "-" "curl/7.76.1"
+10.244.0.1 - - [23/Nov/2026:19:39:19 +0000] "GET /health HTTP/1.1" 200 34 "-" "kube-probe/1.37"
+--- prod pod (1.0.1) logs:
+[2026-11-23 19:38:03 +0000] [1] [INFO] Using worker: sync
+[2026-11-23 19:38:03 +0000] [6] [INFO] Booting worker with pid: 6
+[2026-11-23 19:38:03 +0000] [7] [INFO] Booting worker with pid: 7
+
+=================== 5. A/B TESTING (route by header) :30085 ===================
+no header   -> A: "version":"1.0.1"
+X-Variant: B -> B: "version":"1.2.0"
+
+=================== 6. AUTOMATIC ROLLBACK on a bad release ===================
+>>> updating aceest-rolling to docker.io/sh00010111/aceest-fitness:9.9.9
+deployment.apps/aceest-rolling image updated
+Waiting for deployment "aceest-rolling" rollout to finish: 0 out of 3 new replicas have been updated...
+Waiting for deployment "aceest-rolling" rollout to finish: 1 out of 3 new replicas have been updated...
+error: timed out waiting for the condition
+>>> rollout FAILED - rolling back to the last stable revision
+Warning: resource deployments/aceest-rolling was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/aceest-rolling rolled back
+Waiting for deployment "aceest-rolling" rollout to finish: 1 old replicas are pending termination...
+deployment "aceest-rolling" successfully rolled out
+>>> rollback complete; running image: docker.io/sh00010111/aceest-fitness:1.0.1
+service still healthy on: "version":"1.0.1"
+
+=================== Done ===================

@@ -1,0 +1,384 @@
+>>> building sh00010111/aceest-fitness:1.0.1 from git tag v1.0.1
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 ...
+
+#3 [auth] library/python:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 2.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 202B done
+#4 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#5 resolve docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b 0.0s done
+#5 ...
+
+#6 [internal] load build context
+#6 transferring context: 14.72kB done
+#6 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#5 sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b 10.37kB / 10.37kB done
+#5 sha256:05a994d2344eb364cc186910f4fc8786a38215f39f00d0acc25bff33a08f4177 1.75kB / 1.75kB done
+#5 sha256:78976a69c067520ef8be34cde307ef9f6fea6dcefa50edb57039773d241ca0db 5.66kB / 5.66kB done
+#5 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 0B / 29.86MB 0.2s
+#5 sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9 0B / 1.29MB 0.2s
+#5 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 0B / 12.12MB 0.2s
+#5 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 9.50MB / 29.86MB 0.3s
+#5 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 29.86MB / 29.86MB 0.4s
+#5 extracting sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41
+#5 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 29.86MB / 29.86MB 0.4s done
+#5 sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9 1.29MB / 1.29MB 0.5s done
+#5 sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b 0B / 248B 0.5s
+#5 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 12.12MB / 12.12MB 0.7s done
+#5 sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b 248B / 248B 0.7s done
+#5 extracting sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 2.1s done
+#5 extracting sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9
+#5 extracting sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9 0.2s done
+#5 extracting sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085
+#5 extracting sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 1.1s done
+#5 extracting sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b
+#5 extracting sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b done
+#5 DONE 4.2s
+
+#7 [runtime 2/8] WORKDIR /app
+#7 DONE 0.3s
+
+#8 [builder 2/4] WORKDIR /build
+#8 DONE 0.3s
+
+#9 [builder 3/4] COPY requirements.txt .
+#9 DONE 0.1s
+
+#10 [builder 4/4] RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+#10 ...
+
+#11 [runtime 3/8] RUN groupadd --system aceest && useradd --system --gid aceest --no-create-home aceest
+#11 DONE 0.5s
+
+#10 [builder 4/4] RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+#10 3.286 Collecting Flask==3.1.2 (from -r requirements.txt (line 1))
+#10 3.341   Downloading flask-3.1.2-py3-none-any.whl.metadata (3.2 kB)
+#10 3.397 Collecting gunicorn==23.0.0 (from -r requirements.txt (line 2))
+#10 3.403   Downloading gunicorn-23.0.0-py3-none-any.whl.metadata (4.4 kB)
+#10 3.426 Collecting blinker>=1.9.0 (from Flask==3.1.2->-r requirements.txt (line 1))
+#10 3.433   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#10 3.471 Collecting click>=8.1.3 (from Flask==3.1.2->-r requirements.txt (line 1))
+#10 3.477   Downloading click-8.5.1-py3-none-any.whl.metadata (2.6 kB)
+#10 3.490 Collecting itsdangerous>=2.2.0 (from Flask==3.1.2->-r requirements.txt (line 1))
+#10 3.496   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#10 3.522 Collecting jinja2>=3.1.2 (from Flask==3.1.2->-r requirements.txt (line 1))
+#10 3.528   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#10 3.651 Collecting markupsafe>=2.1.1 (from Flask==3.1.2->-r requirements.txt (line 1))
+#10 3.655   Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#10 3.696 Collecting werkzeug>=3.1.0 (from Flask==3.1.2->-r requirements.txt (line 1))
+#10 3.701   Downloading werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
+#10 3.730 Collecting packaging (from gunicorn==23.0.0->-r requirements.txt (line 2))
+#10 3.735   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+#10 3.757 Downloading flask-3.1.2-py3-none-any.whl (103 kB)
+#10 3.763 Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)
+#10 3.769 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#10 3.773 Downloading click-8.5.1-py3-none-any.whl (126 kB)
+#10 3.778 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#10 3.783 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#10 3.788 Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#10 3.794 Downloading werkzeug-3.1.9-py3-none-any.whl (228 kB)
+#10 3.800 Downloading packaging-26.3-py3-none-any.whl (129 kB)
+#10 3.823 Saved /wheels/flask-3.1.2-py3-none-any.whl
+#10 3.823 Saved /wheels/gunicorn-23.0.0-py3-none-any.whl
+#10 3.823 Saved /wheels/blinker-1.9.0-py3-none-any.whl
+#10 3.824 Saved /wheels/click-8.5.1-py3-none-any.whl
+#10 3.825 Saved /wheels/itsdangerous-2.2.0-py3-none-any.whl
+#10 3.826 Saved /wheels/jinja2-3.1.6-py3-none-any.whl
+#10 3.827 Saved /wheels/markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+#10 3.828 Saved /wheels/werkzeug-3.1.9-py3-none-any.whl
+#10 3.829 Saved /wheels/packaging-26.3-py3-none-any.whl
+#10 3.964 
+#10 3.964 [notice] A new release of pip is available: 25.0.1 -> 26.3
+#10 3.964 [notice] To update, run: pip install --upgrade pip
+#10 DONE 4.2s
+
+#12 [runtime 4/8] COPY --from=builder /wheels /wheels
+#12 DONE 0.0s
+
+#13 [runtime 5/8] RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
+#13 2.681 Processing /wheels/blinker-1.9.0-py3-none-any.whl
+#13 2.690 Processing /wheels/click-8.5.1-py3-none-any.whl
+#13 2.696 Processing /wheels/flask-3.1.2-py3-none-any.whl
+#13 2.703 Processing /wheels/gunicorn-23.0.0-py3-none-any.whl
+#13 2.710 Processing /wheels/itsdangerous-2.2.0-py3-none-any.whl
+#13 2.715 Processing /wheels/jinja2-3.1.6-py3-none-any.whl
+#13 2.721 Processing /wheels/markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+#13 2.726 Processing /wheels/packaging-26.3-py3-none-any.whl
+#13 2.731 Processing /wheels/werkzeug-3.1.9-py3-none-any.whl
+#13 2.797 Installing collected packages: packaging, markupsafe, itsdangerous, click, blinker, werkzeug, jinja2, gunicorn, flask
+#13 3.893 Successfully installed blinker-1.9.0 click-8.5.1 flask-3.1.2 gunicorn-23.0.0 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.4 packaging-26.3 werkzeug-3.1.9
+#13 3.894 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#13 4.031 
+#13 4.031 [notice] A new release of pip is available: 25.0.1 -> 26.3
+#13 4.031 [notice] To update, run: pip install --upgrade pip
+#13 DONE 4.2s
+
+#14 [runtime 6/8] COPY app.py db.py fitness.py ./
+#14 DONE 0.2s
+
+#15 [runtime 7/8] COPY templates ./templates
+#15 DONE 0.1s
+
+#16 [runtime 8/8] RUN mkdir -p /app/data && chown -R aceest:aceest /app/data
+#16 DONE 0.3s
+
+#17 exporting to image
+#17 exporting layers
+#17 exporting layers 0.3s done
+#17 writing image sha256:c0652c40ef36351666cc4bccc26322c4edb3019f4d98170f65930a345d4794d4 done
+#17 naming to docker.io/sh00010111/aceest-fitness:1.0.1 done
+#17 DONE 0.3s
+The push refers to repository [docker.io/sh00010111/aceest-fitness]
+5386369cc251: Preparing
+1174dc7dbe05: Preparing
+d2768dae574a: Preparing
+b1fce1dc4838: Preparing
+43083d98fea1: Preparing
+84c321cc440d: Preparing
+b1330726784c: Preparing
+340931a1d986: Preparing
+96a69f98ae07: Preparing
+3dc3efdf0110: Preparing
+dd57f90311a2: Preparing
+84c321cc440d: Waiting
+b1330726784c: Waiting
+340931a1d986: Waiting
+96a69f98ae07: Waiting
+3dc3efdf0110: Waiting
+dd57f90311a2: Waiting
+1174dc7dbe05: Pushed
+5386369cc251: Pushed
+d2768dae574a: Pushed
+43083d98fea1: Pushed
+b1fce1dc4838: Pushed
+340931a1d986: Mounted from library/python
+96a69f98ae07: Mounted from library/python
+3dc3efdf0110: Mounted from library/python
+b1330726784c: Pushed
+84c321cc440d: Pushed
+dd57f90311a2: Mounted from library/python
+1.0.1: digest: sha256:39e6d289e1fa65a5f2fa52a52714bf3136bfda992be687de7e4674b6351175ad size: 2616
+>>> building sh00010111/aceest-fitness:1.1.0 from git tag v1.1.0
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.45kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 202B done
+#3 DONE 0.0s
+
+#4 [builder 1/4] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 15.79kB done
+#5 DONE 0.0s
+
+#6 [runtime 2/8] WORKDIR /app
+#6 CACHED
+
+#7 [builder 4/4] RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+#7 CACHED
+
+#8 [builder 2/4] WORKDIR /build
+#8 CACHED
+
+#9 [builder 3/4] COPY requirements.txt .
+#9 CACHED
+
+#10 [runtime 3/8] RUN groupadd --system aceest && useradd --system --gid aceest --no-create-home aceest
+#10 CACHED
+
+#11 [runtime 4/8] COPY --from=builder /wheels /wheels
+#11 CACHED
+
+#12 [runtime 5/8] RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
+#12 CACHED
+
+#13 [runtime 6/8] COPY app.py db.py fitness.py ./
+#13 DONE 0.1s
+
+#14 [runtime 7/8] COPY templates ./templates
+#14 DONE 0.0s
+
+#15 [runtime 8/8] RUN mkdir -p /app/data && chown -R aceest:aceest /app/data
+#15 DONE 0.3s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 writing image sha256:a06e15b1fffc263e2c525214c0d508720b3cbe8d17a8486d48f35f6ba4a3d44d done
+#16 naming to docker.io/sh00010111/aceest-fitness:1.1.0 done
+#16 DONE 0.2s
+The push refers to repository [docker.io/sh00010111/aceest-fitness]
+377aa3f5e805: Preparing
+fe7c07b9d8c5: Preparing
+30d2c7d561f2: Preparing
+b1fce1dc4838: Preparing
+43083d98fea1: Preparing
+84c321cc440d: Preparing
+b1330726784c: Preparing
+340931a1d986: Preparing
+96a69f98ae07: Preparing
+3dc3efdf0110: Preparing
+dd57f90311a2: Preparing
+84c321cc440d: Waiting
+b1330726784c: Waiting
+340931a1d986: Waiting
+96a69f98ae07: Waiting
+3dc3efdf0110: Waiting
+dd57f90311a2: Waiting
+b1fce1dc4838: Layer already exists
+43083d98fea1: Layer already exists
+b1330726784c: Layer already exists
+84c321cc440d: Layer already exists
+340931a1d986: Layer already exists
+96a69f98ae07: Layer already exists
+dd57f90311a2: Layer already exists
+3dc3efdf0110: Layer already exists
+30d2c7d561f2: Pushed
+fe7c07b9d8c5: Pushed
+377aa3f5e805: Pushed
+1.1.0: digest: sha256:0654f49c00e925b2ef45920e65f2c90e7af843b178361c8b2ba2543d4f125477 size: 2616
+>>> building sh00010111/aceest-fitness:1.2.0 from git tag v1.2.0
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.45kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 202B done
+#3 DONE 0.0s
+
+#4 [builder 1/4] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 16.47kB done
+#5 DONE 0.0s
+
+#6 [runtime 3/8] RUN groupadd --system aceest && useradd --system --gid aceest --no-create-home aceest
+#6 CACHED
+
+#7 [builder 2/4] WORKDIR /build
+#7 CACHED
+
+#8 [builder 4/4] RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+#8 CACHED
+
+#9 [builder 3/4] COPY requirements.txt .
+#9 CACHED
+
+#10 [runtime 4/8] COPY --from=builder /wheels /wheels
+#10 CACHED
+
+#11 [runtime 2/8] WORKDIR /app
+#11 CACHED
+
+#12 [runtime 5/8] RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
+#12 CACHED
+
+#13 [runtime 6/8] COPY app.py db.py fitness.py ./
+#13 DONE 0.1s
+
+#14 [runtime 7/8] COPY templates ./templates
+#14 DONE 0.1s
+
+#15 [runtime 8/8] RUN mkdir -p /app/data && chown -R aceest:aceest /app/data
+#15 DONE 0.3s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 writing image sha256:43c409245676cf94c580483f8be1067dd4891419262cd11771582ce63e992a68 done
+#16 naming to docker.io/sh00010111/aceest-fitness:1.2.0 done
+#16 DONE 0.2s
+The push refers to repository [docker.io/sh00010111/aceest-fitness]
+6904ebe07a87: Preparing
+8025837d779b: Preparing
+2991bf7b2335: Preparing
+b1fce1dc4838: Preparing
+43083d98fea1: Preparing
+84c321cc440d: Preparing
+b1330726784c: Preparing
+340931a1d986: Preparing
+96a69f98ae07: Preparing
+3dc3efdf0110: Preparing
+dd57f90311a2: Preparing
+b1330726784c: Waiting
+340931a1d986: Waiting
+96a69f98ae07: Waiting
+84c321cc440d: Waiting
+3dc3efdf0110: Waiting
+dd57f90311a2: Waiting
+b1fce1dc4838: Layer already exists
+43083d98fea1: Layer already exists
+84c321cc440d: Layer already exists
+b1330726784c: Layer already exists
+340931a1d986: Layer already exists
+96a69f98ae07: Layer already exists
+3dc3efdf0110: Layer already exists
+dd57f90311a2: Layer already exists
+8025837d779b: Pushed
+2991bf7b2335: Pushed
+6904ebe07a87: Pushed
+1.2.0: digest: sha256:48e37a192e26b410c1af509c4a8a103f8f3a5c21b12b31b2c7dd1529635be51f size: 2616
+The push refers to repository [docker.io/sh00010111/aceest-fitness]
+6904ebe07a87: Preparing
+8025837d779b: Preparing
+2991bf7b2335: Preparing
+b1fce1dc4838: Preparing
+43083d98fea1: Preparing
+84c321cc440d: Preparing
+b1330726784c: Preparing
+340931a1d986: Preparing
+96a69f98ae07: Preparing
+3dc3efdf0110: Preparing
+dd57f90311a2: Preparing
+84c321cc440d: Waiting
+b1330726784c: Waiting
+340931a1d986: Waiting
+96a69f98ae07: Waiting
+3dc3efdf0110: Waiting
+dd57f90311a2: Waiting
+6904ebe07a87: Layer already exists
+2991bf7b2335: Layer already exists
+43083d98fea1: Layer already exists
+8025837d779b: Layer already exists
+b1fce1dc4838: Layer already exists
+84c321cc440d: Layer already exists
+b1330726784c: Layer already exists
+96a69f98ae07: Layer already exists
+340931a1d986: Layer already exists
+3dc3efdf0110: Layer already exists
+dd57f90311a2: Layer already exists
+latest: digest: sha256:48e37a192e26b410c1af509c4a8a103f8f3a5c21b12b31b2c7dd1529635be51f size: 2616
+
+Versions now on Docker Hub:
+REPOSITORY                  TAG       IMAGE ID       CREATED          SIZE
+sh00010111/aceest-fitness   1.2.0     43c409245676   16 seconds ago   127MB
+sh00010111/aceest-fitness   latest    43c409245676   16 seconds ago   127MB
+sh00010111/aceest-fitness   1.1.0     a06e15b1fffc   28 seconds ago   127MB
+sh00010111/aceest-fitness   1.0.1     c0652c40ef36   44 seconds ago   127MB
