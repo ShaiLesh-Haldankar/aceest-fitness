@@ -1,0 +1,19 @@
+SonarQube report - ACEest Fitness & Gym
+============================================
+Quality gate : OK
+
+  new_reliability_rating       OK     actual=1 threshold=1
+  new_security_rating          OK     actual=1 threshold=1
+  new_maintainability_rating   OK     actual=1 threshold=1
+
+Measures:
+  ncloc                        352
+  bugs                         0
+  vulnerabilities              0
+  security_hotspots            1
+  code_smells                  1
+  coverage                     97.9
+  duplicated_lines_density     0.0
+  reliability_rating           A
+  security_rating              A
+  sqale_rating                 A

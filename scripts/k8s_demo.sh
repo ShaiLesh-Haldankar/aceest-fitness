@@ -28,10 +28,10 @@ echo -n "after rollback: "; ver http://$IP:30081/health
 
 hdr "2. BLUE-GREEN :30082"
 echo -n "live = blue : "; ver http://$IP:30082/health
-echo "--- switch traffic to green"; kubectl patch service aceest-bg -p '{"spec":{"selector":{"app":"aceest-bg","version":"green"}}}'
+echo "--- switch traffic to green"; kubectl patch service aceest-bg -p '{"spec":{"selector":{"app":"aceest-bg","version":"green"}}}'; sleep 5
 echo -n "live = green: "; ver http://$IP:30082/health
 echo -n "new endpoint /api/stats on green -> HTTP "; curl -s -o /dev/null -w "%{http_code}\n" http://$IP:30082/api/stats
-echo "--- instant rollback to blue"; kubectl patch service aceest-bg -p '{"spec":{"selector":{"app":"aceest-bg","version":"blue"}}}'
+echo "--- instant rollback to blue"; kubectl patch service aceest-bg -p '{"spec":{"selector":{"app":"aceest-bg","version":"blue"}}}'; sleep 5
 echo -n "live = blue : "; ver http://$IP:30082/health
 
 hdr "3. CANARY (3 stable : 1 canary) :30083"
