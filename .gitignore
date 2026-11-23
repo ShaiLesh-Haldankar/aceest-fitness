@@ -8,3 +8,5 @@ venv/
 htmlcov/
 coverage.xml
 test-results.xml
+.scannerwork/
+sonar-report.txt
