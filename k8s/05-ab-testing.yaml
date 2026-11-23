@@ -1,0 +1,154 @@
+# A/B testing: the gateway routes by request header. X-Variant: B => version 1.2.0, everything else => version 1.0.1.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-ab-a
+  labels:
+    strategy: aceest-ab-a
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aceest-ab-a
+  template:
+    metadata:
+      labels:
+        app: aceest-ab-a
+    spec:
+      containers:
+        - name: app
+          image: docker.io/sh00010111/aceest-fitness:1.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {cpu: 200m, memory: 160Mi}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-ab-b
+  labels:
+    strategy: aceest-ab-b
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aceest-ab-b
+  template:
+    metadata:
+      labels:
+        app: aceest-ab-b
+    spec:
+      containers:
+        - name: app
+          image: docker.io/sh00010111/aceest-fitness:1.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {cpu: 200m, memory: 160Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-ab-a
+spec:
+  selector:
+    app: aceest-ab-a
+  ports:
+    - port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-ab-b
+spec:
+  selector:
+    app: aceest-ab-b
+  ports:
+    - port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aceest-ab-gw-conf
+data:
+  default.conf: |
+      upstream variant_a { server aceest-ab-a:5000; }
+      upstream variant_b { server aceest-ab-b:5000; }
+      map $http_x_variant $ab_backend {
+        default variant_a;
+        "B"     variant_b;
+      }
+      server {
+        listen 80;
+        location / {
+          proxy_pass http://$ab_backend;
+        }
+      }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-ab-gw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest-ab-gw
+  template:
+    metadata:
+      labels:
+        app: aceest-ab-gw
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: conf
+              mountPath: /etc/nginx/conf.d
+          resources:
+            requests: {cpu: 10m, memory: 16Mi}
+            limits: {cpu: 100m, memory: 64Mi}
+      volumes:
+        - name: conf
+          configMap:
+            name: aceest-ab-gw-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-ab-gw
+spec:
+  type: NodePort
+  selector:
+    app: aceest-ab-gw
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30085

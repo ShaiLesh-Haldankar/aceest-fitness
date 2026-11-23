@@ -1,0 +1,88 @@
+# Blue-Green: two full environments; the Service selector decides which one is live. Rollback = switch selector back.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-blue
+  labels:
+    strategy: aceest-bg
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aceest-bg
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: aceest-bg
+        version: blue
+    spec:
+      containers:
+        - name: app
+          image: docker.io/sh00010111/aceest-fitness:1.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {cpu: 200m, memory: 160Mi}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-green
+  labels:
+    strategy: aceest-bg
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: aceest-bg
+      version: green
+  template:
+    metadata:
+      labels:
+        app: aceest-bg
+        version: green
+    spec:
+      containers:
+        - name: app
+          image: docker.io/sh00010111/aceest-fitness:1.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: {path: /health, port: 5000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {cpu: 200m, memory: 160Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-bg
+spec:
+  type: NodePort
+  selector:
+    app: aceest-bg
+    version: blue
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 30082
